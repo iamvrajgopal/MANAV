@@ -6,15 +6,13 @@
 
 <title>MANAVision — Mangrove AI Detection</title>
 
-<!-- Font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-<!-- TensorFlow + Teachable Machine -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.20.0/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.4/dist/teachablemachine-image.min.js"></script>
 
 <style>
-/* 🌿 Mangrove Theme */
+/* 🌿 Base theme */
 body {
   margin: 0;
   font-family: Inter, system-ui, sans-serif;
@@ -26,8 +24,8 @@ body {
 /* Header */
 .header {
   max-width: 1200px;
-  margin: 20px auto;
-  padding: 14px 20px;
+  margin: 12px auto;
+  padding: 14px 16px;
   background: linear-gradient(135deg, #1b4332, #2d6a4f);
   color: white;
   border-radius: 14px;
@@ -37,7 +35,7 @@ body {
 }
 
 .header .title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
 }
 
@@ -50,13 +48,13 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 12px;
 }
 
 .main {
   display: grid;
   grid-template-columns: 360px 1fr;
-  gap: 20px;
+  gap: 16px;
 }
 
 /* Cards */
@@ -70,12 +68,14 @@ body {
 
 h3 {
   margin-top: 0;
+  font-size: 16px;
 }
 
 /* Inputs & buttons */
 .input {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
+  font-size: 16px;
   border-radius: 8px;
   border: 1px solid #cce3d8;
 }
@@ -83,10 +83,12 @@ h3 {
 .cta {
   background: #40916c;
   color: white;
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
+  flex: 1;
 }
 
 .cta:disabled {
@@ -96,16 +98,18 @@ h3 {
 .outline {
   background: white;
   color: #1b4332;
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
   border: 1px solid #74c69d;
   cursor: pointer;
+  flex: 1;
 }
 
 /* Preview */
 .preview {
   width: 100%;
-  max-height: 420px;
+  max-height: 300px;
   object-fit: contain;
   border-radius: 10px;
   border: 1px solid #cce3d8;
@@ -115,8 +119,9 @@ h3 {
 .resultRow {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   margin-top: 8px;
+  font-size: 14px;
 }
 
 .progress {
@@ -141,33 +146,60 @@ h3 {
   color: #7c2d12;
   padding: 10px 12px;
   border-radius: 8px;
+  font-size: 14px;
 }
 
 /* Footer */
 .footer {
   text-align: center;
-  padding: 18px;
+  padding: 16px;
   color: #52796f;
+  font-size: 13px;
 }
 
 /* Toast */
 .toast {
   position: fixed;
-  bottom: 20px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   background: #1b4332;
   color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
   display: none;
+  font-size: 14px;
+}
+
+/* 📱 MOBILE ADJUSTMENTS */
+@media (max-width: 768px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .header button {
+    width: 100%;
+  }
+
+  .preview {
+    max-height: 240px;
+  }
+
+  .resultRow div:first-child {
+    width: 110px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Header -->
 <div class="header">
   <div>
     <div class="title">MANAVision 🌿</div>
@@ -176,22 +208,21 @@ h3 {
   <button id="loadModelBtn" class="outline">Load Model</button>
 </div>
 
-<div style="text-align:center; font-size:16px; margin-bottom:10px;">
+<div style="text-align:center; font-size:15px; margin-bottom:10px;">
   Protecting mangroves through AI-powered vision
 </div>
 
 <div class="container main">
 
-  <!-- Left column -->
+  <!-- Left -->
   <div>
 
-    <!-- Input -->
     <div class="card">
       <h3>Input</h3>
       <input id="imageInput" class="input" type="file" accept="image/*" capture="environment">
 
       <div style="display:flex; gap:8px; margin-top:12px;">
-        <button id="classifyBtn" class="cta">Classify Image</button>
+        <button id="classifyBtn" class="cta">Classify</button>
         <button id="clearBtn" class="outline">Clear</button>
       </div>
 
@@ -200,13 +231,11 @@ h3 {
       </div>
     </div>
 
-    <!-- Results -->
     <div class="card" style="margin-top:12px;">
       <h3>Results</h3>
       <div id="results"></div>
     </div>
 
-    <!-- Settings -->
     <div class="card" style="margin-top:12px;">
       <h3>Settings</h3>
       <label for="thresholdInput">Detection threshold (0–100)</label>
@@ -215,11 +244,11 @@ h3 {
 
   </div>
 
-  <!-- Right column -->
+  <!-- Right -->
   <div>
     <div class="card">
       <h3>Preview</h3>
-      <img id="preview" class="preview" src="" alt="Image preview">
+      <img id="preview" class="preview" src="" alt="Preview">
       <div id="warning" class="warning"></div>
     </div>
   </div>
@@ -257,17 +286,16 @@ async function loadModel() {
       MODEL_FOLDER + 'metadata.json'
     );
     el.modelStatus.textContent = 'Loaded';
-    showToast('Model loaded successfully');
-  } catch (err) {
+    showToast('Model loaded');
+  } catch (e) {
     el.modelStatus.textContent = 'Failed';
-    showToast('Error loading model');
-    console.error(err);
+    showToast('Model load failed');
   }
 }
 
 el.loadModelBtn.onclick = loadModel;
 
-el.imageInput.onchange = (e) => {
+el.imageInput.onchange = e => {
   const file = e.target.files[0];
   if (!file) return;
   el.preview.src = URL.createObjectURL(file);
@@ -289,17 +317,12 @@ el.classifyBtn.onclick = async () => {
   el.classifyBtn.disabled = true;
   el.classifyBtn.textContent = 'Analyzing...';
 
-  try {
-    const preds = await model.predict(el.preview);
-    preds.sort((a, b) => b.probability - a.probability);
-    renderPredictions(preds);
-  } catch (err) {
-    showToast('Prediction error');
-    console.error(err);
-  } finally {
-    el.classifyBtn.disabled = false;
-    el.classifyBtn.textContent = 'Classify Image';
-  }
+  const preds = await model.predict(el.preview);
+  preds.sort((a,b) => b.probability - a.probability);
+  renderPredictions(preds);
+
+  el.classifyBtn.disabled = false;
+  el.classifyBtn.textContent = 'Classify';
 };
 
 function renderPredictions(preds) {
@@ -308,15 +331,12 @@ function renderPredictions(preds) {
   const top = preds[0];
 
   preds.forEach(p => {
-    const row = document.createElement('div');
-    row.className = 'resultRow';
-
-    row.innerHTML = `
-      <div style="width:140px">${p.className}</div>
-      <div class="progress"><span style="width:${p.probability*100}%"></span></div>
-      <div style="width:54px">${(p.probability*100).toFixed(1)}%</div>
-    `;
-    el.results.appendChild(row);
+    el.results.innerHTML += `
+      <div class="resultRow">
+        <div style="width:120px">${p.className}</div>
+        <div class="progress"><span style="width:${p.probability*100}%"></span></div>
+        <div>${(p.probability*100).toFixed(1)}%</div>
+      </div>`;
   });
 
   if (/polluted/i.test(top.className) && top.probability >= threshold) {
@@ -326,7 +346,7 @@ function renderPredictions(preds) {
   }
 }
 
-function showToast(msg, ms = 3000) {
+function showToast(msg, ms=3000) {
   el.toast.textContent = msg;
   el.toast.style.display = 'block';
   setTimeout(() => el.toast.style.display = 'none', ms);
